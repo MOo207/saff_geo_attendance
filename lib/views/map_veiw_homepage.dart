@@ -33,9 +33,9 @@ class MapHomePageState extends State<MapHomePage> {
   double zoom = 17;
 
   GoogleMapController? controller;
-  // LatLng centerOfZone = const LatLng(24.830617915521096, 46.637221751327004);
-  LatLng centerOfZone = const LatLng(24.485550289681754, 39.55926658692821);
-  double radiusOfZone = 50;
+  LatLng centerOfZone = const LatLng(24.830617915521096, 46.637221751327004);
+  // LatLng centerOfZone = const LatLng(24.485550289681754, 39.55926658692821);
+  double radiusOfZone = 30;
 
   // ignore: use_setters_to_change_properties
   void _onMapCreated(GoogleMapController controller) {
