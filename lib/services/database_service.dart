@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:saff_geo_attendence/models/attendence.dart';
 import 'package:saff_geo_attendence/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,6 +17,7 @@ class DatabaseService {
 
   initDB() async {
     try {
+      // await deleteDatabase();
       return await openDatabase(
         join(await getDatabasesPath(), 'saff_geo_attendence.db'),
         onCreate: (db, version) async {
@@ -29,12 +31,16 @@ class DatabaseService {
     }
   }
 
+  Future<void> deleteDatabase() async {
+    String path = join(await getDatabasesPath(), 'saff_geo_attendence.db');
+    await databaseFactory.deleteDatabase(path);
+  }
+
   // create table for user [User]
   Future<void> createUserTable(Database db) async {
     await db.execute(
       '''CREATE TABLE IF NOT EXISTS user(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL, 
         email TEXT NOT NULL, 
         password TEXT NOT NULL, 
         isLoggedIn INTEGER NOT NULL DEFAULT 0)''',
@@ -42,7 +48,7 @@ class DatabaseService {
   }
 
   // create table for attendence [attendence]
-  Future<void> createAttendenceTable(db) async {
+  Future<void> createAttendenceTable(Database db) async {
     await db.execute(
       '''CREATE TABLE IF NOT EXISTS attendence(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,7 +78,7 @@ class DatabaseService {
     );
   }
 
-  Future<void> insertAttendence(Map<String, dynamic> attendence) async {
+  Future<void> attendUser(Map<String, dynamic> attendence) async {
     final Database db = await database;
     await db.insert(
       'attendence',
@@ -88,6 +94,20 @@ class DatabaseService {
       'user',
       where: 'email = ? AND password = ?',
       whereArgs: [email, password],
+    );
+    if (maps.isNotEmpty) {
+      return User.fromJson(maps.first);
+    }
+    return null;
+  }
+
+  // get user by email
+  Future<User?> getUserByEmail(String email) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'user',
+      where: 'email = ?',
+      whereArgs: [email],
     );
     if (maps.isNotEmpty) {
       return User.fromJson(maps.first);
@@ -152,5 +172,52 @@ class DatabaseService {
       where: "id = ?",
       whereArgs: [id],
     );
+  }
+
+  // get all users
+  Future<List<User>> getAllUsers() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('user');
+    return List.generate(maps.length, (i) {
+      return User.fromJson(maps[i]);
+    });
+  }
+
+  // get logged in user
+  Future<User?> getLoggedInUser() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'user',
+      where: 'isLoggedIn = ?',
+      whereArgs: [1],
+    );
+    if (maps.isNotEmpty) {
+      return User.fromJson(maps.first);
+    }
+    return null;
+  }
+
+  // getUserAttendence
+  Future<List<Attendence>> getUserAttendence(int userId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'attendence',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+    return List.generate(maps.length, (i) {
+      return Attendence.fromJson(maps[i]);
+    });
+  }
+
+  // check if user attend today
+  Future<bool> isUserAttendToday(int userId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'attendence',
+      where: 'userId = ? AND attendAt = ?',
+      whereArgs: [userId, DateTime.now().toIso8601String().substring(0, 10)],
+    );
+    return maps.isNotEmpty;
   }
 }

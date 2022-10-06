@@ -2,17 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-const primaryConol = Color(0xFF0f5731);
+import 'package:saff_geo_attendence/helper/constants.dart';
+import 'package:saff_geo_attendence/services/shared_preferences_service.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeMode? _themeMode;
-   ThemeMode? get themeMode => _themeMode;
+  ThemeMode? get themeMode => _themeMode;
 
-    ThemeProvider(this._themeMode);
-
-   
+  ThemeProvider(this._themeMode);
 
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
@@ -23,41 +20,43 @@ class ThemeProvider with ChangeNotifier {
     }
   }
 
-  void toggleTheme(bool isOn) async{
+  void toggleTheme(bool isOn) async {
     _themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isDark", isOn);
+    SharedPreferencesService prefs = SharedPreferencesService.instance;
+    prefs.setDark(isOn);
     notifyListeners();
   }
-  }
+}
 
-Map<int, Color> blackSwatchColorMap = {   
-      50: Color(0xFF0f5731),
-      100: Color(0xFF0f5731),
-      200: Color(0xFF0f5731),
-      300: Color(0xFF0f5731),
-      400: Color(0xFF0f5731),
-      500: Color(0xFF0f5731),
-      600: Color(0xFF0f5731),
-      700: Color(0xFF0f5731),
-      800: Color(0xFF0f5731),
-      900: Color(0xFF0f5731),
-      1000: Color(0xFF0f5731),
+Color primaryColor = Constants.primaryColor;
+
+Map<int, Color> blackSwatchColorMap = {
+  50: primaryColor,
+  100: primaryColor,
+  200: primaryColor,
+  300: primaryColor,
+  400: primaryColor,
+  500: primaryColor,
+  600: primaryColor,
+  700: primaryColor,
+  800: primaryColor,
+  900: primaryColor,
+  1000: primaryColor,
 };
 MaterialColor blackSwatch = MaterialColor(0xFF0f5731, blackSwatchColorMap);
 
 Map<int, Color> whiteSwatchColorMap = {
-    50: Color(0xFF0f5731),
-      100: Color(0xFF0f5731),
-      200: Color(0xFF0f5731),
-      300: Color(0xFF0f5731),
-      400: Color(0xFF0f5731),
-      500: Color(0xFF0f5731),
-      600: Color(0xFF0f5731),
-      700: Color(0xFF0f5731),
-      800: Color(0xFF0f5731),
-      900: Color(0xFF0f5731),
-      1000: Color(0xFF0f5731),
+  50: primaryColor,
+  100: primaryColor,
+  200: primaryColor,
+  300: primaryColor,
+  400: primaryColor,
+  500: primaryColor,
+  600: primaryColor,
+  700: primaryColor,
+  800: primaryColor,
+  900: primaryColor,
+  1000: primaryColor,
 };
 // Green color code: 93cd48 and first two characters (FF) are alpha values (transparency)
 MaterialColor whiteSwatch = MaterialColor(0xFF0f5731, whiteSwatchColorMap);
@@ -68,7 +67,7 @@ class MyThemes {
       color: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.white),
     ),
-    primaryColor: primaryConol,
+    primaryColor: primaryColor,
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 24,
@@ -134,6 +133,10 @@ class MyThemes {
         fontSize: 10,
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryColor,
+      foregroundColor: Colors.white,
+    ),
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSwatch(
       primarySwatch: whiteSwatch,
@@ -141,12 +144,12 @@ class MyThemes {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: primaryConol,
+        primary: primaryColor,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        primary: primaryConol,
+        primary: primaryColor,
       ),
     ),
     iconTheme: IconThemeData(color: whiteSwatch),
@@ -225,7 +228,11 @@ class MyThemes {
         fontSize: 10,
       ),
     ),
-    primaryColor: primaryConol,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryColor,
+      foregroundColor: Colors.white,
+    ),
+    primaryColor: primaryColor,
     brightness: Brightness.light,
     dividerColor: Colors.white54,
     colorScheme: ColorScheme.fromSwatch(
@@ -234,12 +241,12 @@ class MyThemes {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: primaryConol,
+        primary: primaryColor,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        primary: primaryConol,
+        primary: primaryColor,
       ),
     ),
     iconTheme: IconThemeData(color: Colors.black),

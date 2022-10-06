@@ -18,12 +18,12 @@ class SettingsView extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.dark_mode),
-                    leading: Icon(Icons.dark_mode_outlined),
+                    leading: const Icon(Icons.dark_mode_outlined),
                     trailing: ChangeThemeButtonWidget(),
                   ),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.change_language),
-                    leading: Icon(Icons.translate),
+                    leading: const Icon(Icons.translate),
                     trailing: ChangeLanguageButton(),
                   )
                 ],

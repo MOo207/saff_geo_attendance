@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fancy_password_field/fancy_password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:saff_geo_attendence/helper/validators.dart';
@@ -37,6 +39,7 @@ class _SignupViewState extends State<SignupView> {
                   'assets/saff_logo.png',
                   height: 200,
                 ),
+                const SizedBox(height: 10,),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
@@ -171,23 +174,22 @@ class _SignupViewState extends State<SignupView> {
                                 isLoading = true;
                               });
                               try {
-                                var eitherUserOrException = await _authService
+                                var registerDone = await _authService
                                     .register(
                                         emailController.text.trim(), password!);
-                                if (true) {
+                                if (registerDone) {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const LoginView()));
-                                }
-
-                                if (eitherUserOrException is String) {
+                                } else {
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
+                                      .showSnackBar(const SnackBar(
                                     content:
-                                        Text(eitherUserOrException.toString()),
-                                    duration: const Duration(seconds: 2),
+                                        Text("Error while registering user"),
+                                    duration: Duration(seconds: 2),
                                   ));
+                                  
                                 }
                                 setState(() {
                                   isLoading = false;

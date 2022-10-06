@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:saff_geo_attendence/services/shared_preferences_service.dart';
 
 class LocaleProvider with ChangeNotifier {
   Locale? _locale;
@@ -12,9 +12,9 @@ class LocaleProvider with ChangeNotifier {
   bool get isArabic => _locale?.languageCode == "ar";
 
   void changeLocale(bool isArabic) async {
-    _locale = isArabic ? Locale("ar", "SA") : Locale("en", "US");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isArabic", isArabic);
+    _locale = isArabic ? const Locale("ar", "SA") : const Locale("en", "US");
+    SharedPreferencesService prefs =  SharedPreferencesService.instance;
+    await prefs.setArabic(isArabic);
     notifyListeners();
   }
 

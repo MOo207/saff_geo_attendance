@@ -19,7 +19,7 @@ class User {
     final int? id;
     final String? email;
     final String? password;
-    final bool? isLoggedIn;
+    final int? isLoggedIn;
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"] ?? null,
@@ -34,4 +34,10 @@ class User {
         "password": password ?? null,
         "isLoggedIn": isLoggedIn ?? null,
     };
+
+    @override
+    String toString() {
+    // TODO: implement toString
+    return 'User{id: $id, email: $email, password: $password, isLoggedIn: $isLoggedIn}';
+  }
 }

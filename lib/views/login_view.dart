@@ -1,6 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:saff_geo_attendence/helper/constants.dart';
 import 'package:saff_geo_attendence/helper/validators.dart';
+import 'package:saff_geo_attendence/models/user.dart';
 import 'package:saff_geo_attendence/services/auth_service.dart';
+import 'package:saff_geo_attendence/services/database_service.dart';
 import 'package:saff_geo_attendence/views/map_veiw_homepage.dart';
 import 'package:saff_geo_attendence/views/preferences_view.dart';
 import 'package:saff_geo_attendence/views/signup_view.dart';
@@ -15,7 +20,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
@@ -50,6 +55,10 @@ class _LoginViewState extends State<LoginView> {
                 'assets/saff_logo.png',
                 height: 200,
               ),
+              const SizedBox(
+                height: 10,
+              ),
+
               Form(
                 key: _formKey,
                 child: Column(
@@ -84,12 +93,17 @@ class _LoginViewState extends State<LoginView> {
                     TextButton(
                       onPressed: () {
                         //forgot password screen
+                        // getAllUsers
+                        DatabaseService db = DatabaseService.instance;
+                        db.getAllUsers().then((value) {
+                          print(value);
+                        });
                       },
                       child: Text(
                         AppLocalizations.of(context)!.forgot_password,
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: const Color(0xFF0f5731),
+                                  color: Constants.primaryColor,
                                 ),
                       ),
                     ),
@@ -113,25 +127,24 @@ class _LoginViewState extends State<LoginView> {
                               isLoading = true;
                             });
                             try {
-                              var userEitherException =
-                                  await _authService.login(
+                              var loginResult = await _authService.login(
                                 emailController.text.trim(),
                                 passwordController.text.trim(),
                               );
                               // if user is subtype of user, or firebaseauthexception is thrown, then show error message
-                              if (true) {
+                              if (loginResult.containsKey(true)) {
+                                User loggedInUser = User.fromJson(loginResult[true] as Map<String, dynamic>);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const MapHomePage()));
-                              }
-
-                              if (userEitherException
-                                  is String) {
+                                        builder: (context) =>
+                                             MapHomePage(loggedInUser: loggedInUser,)));
+                              } else {
+                                String error = loginResult[false].toString();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
-                                  content: Text(userEitherException.toString()),
-                                  duration: const Duration(seconds: 2),
+                                  content: Text(error),
+                                  duration: Duration(seconds: 2),
                                 ));
                               }
                               setState(() {
@@ -173,8 +186,10 @@ class _LoginViewState extends State<LoginView> {
                           fontSize:
                               Theme.of(context).textTheme.titleLarge!.fontSize),
                     ),
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const SignupView())),
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupView())),
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,

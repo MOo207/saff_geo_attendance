@@ -14,7 +14,7 @@ class AuthService {
   DatabaseService db = DatabaseService.instance;
 
   // login user
-  Future<bool> login(String email, String password) async {
+  Future<Map<bool, Object>> login(String email, String password) async {
     try {
       // get user from database
       final User? user = await db.getUser(email, password);
@@ -22,12 +22,13 @@ class AuthService {
       if (user != null) {
         // update user login status
         await db.updateUserLoginStatus(user.id!, true);
-        return true;
+        Map<bool, Object> result = {true: user.toJson()};
+        return result;
       }
-      return false;
+      return {false: "not registered"};
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      return {false: "error"};
     }
   }
 
@@ -43,16 +44,44 @@ class AuthService {
     }
   }
 
-  // register user by name, email and password
+  // register user by email and password and check if exist before
   Future<bool> register(String email, String password) async {
     try {
-      // create user object
-      final User user = User(
+      // get user from database
+      final User? user = await db.getUserByEmail(email);
+      // if user is not null
+      if (user != null) {
+        return false;
+      }
+      // create new user
+      await db.insertUser(User(
         email: email,
         password: password,
-      );
-      // insert user into database
-      await db.insertUser(user.toJson());
+      ).toJson());
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  // get logged in user
+  Future<User?> getLoggedInUser() async {
+    try {
+      // get user from database
+      final User? user = await db.getLoggedInUser();
+      return user;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+
+  // delete account
+  Future<bool> deleteAccount(int userId) async {
+    try {
+      // delete user from database
+      await db.deleteUser(userId);
       return true;
     } catch (e) {
       debugPrint(e.toString());

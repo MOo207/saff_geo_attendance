@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:saff_geo_attendence/helper/constants.dart';
 
 PreferredSizeWidget myAppBar(context, bool showBackButton) {
   // get current theme by flutter system
@@ -26,7 +27,7 @@ PreferredSizeWidget myAppBar(context, bool showBackButton) {
         Text(
           AppLocalizations.of(context)!.half_title2,
           style:
-              TextStyle(color: Color(0xFF0f5731), fontWeight: FontWeight.w600),
+              TextStyle(color: Constants.primaryColor, fontWeight: FontWeight.w600),
         )
       ],
     ),
