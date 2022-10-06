@@ -1,5 +1,6 @@
 // firebase auth service class
 
+import 'package:crypt/crypt.dart';
 import 'package:flutter/foundation.dart';
 import 'package:saff_geo_attendence/models/user.dart';
 import 'package:saff_geo_attendence/services/database_service.dart';
@@ -17,15 +18,16 @@ class AuthService {
   Future<Map<bool, Object>> login(String email, String password) async {
     try {
       // get user from database
-      final User? user = await db.getUser(email, password);
-      // if user is not null
-      if (user != null) {
+      final User? user = await db.getUserByEmail(email);
+
+      // if user is not null and matched hashed password
+      if (user != null && Crypt(user.password.toString()).match(password)) {
         // update user login status
         await db.updateUserLoginStatus(user.id!, true);
         Map<bool, Object> result = {true: user.toJson()};
         return result;
       }
-      return {false: "not registered"};
+      return {false: "User not registered or password is incorrect"};
     } catch (e) {
       debugPrint(e.toString());
       return {false: "error"};
@@ -56,7 +58,7 @@ class AuthService {
       // create new user
       await db.insertUser(User(
         email: email,
-        password: password,
+        password: Crypt.sha256(password).toString(),
       ).toJson());
       return true;
     } catch (e) {

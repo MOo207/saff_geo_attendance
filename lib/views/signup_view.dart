@@ -174,6 +174,7 @@ class _SignupViewState extends State<SignupView> {
                                 isLoading = true;
                               });
                               try {
+                                
                                 var registerDone = await _authService
                                     .register(
                                         emailController.text.trim(), password!);

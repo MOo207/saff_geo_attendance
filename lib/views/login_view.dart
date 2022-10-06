@@ -93,7 +93,8 @@ class _LoginViewState extends State<LoginView> {
                     TextButton(
                       onPressed: () {
                         //forgot password screen
-                        // getAllUsers
+
+                        // getAllUsers test
                         DatabaseService db = DatabaseService.instance;
                         db.getAllUsers().then((value) {
                           print(value);
