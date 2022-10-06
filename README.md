@@ -19,6 +19,7 @@ you are  ready now to run the project
 ```sh
 flutter run
 ```
-
+## Video Demo
+https://drive.google.com/file/d/1d4dz-9R_Mj4_VJWRD1-XHleIKeNblKqd/view?usp=sharing
 ## Screenshots
-
+https://drive.google.com/drive/folders/1APxc_oQNiXSXaE8CgjwzXPjD0wEDBqZ8?usp=sharing
