@@ -1,16 +1,24 @@
 # saff_geo_attendence
+## _Geo location based attendence system, this is a part of SAFF interview_
 
-A new Flutter project.
+Attendence system based on geo location is a fully functional app to make users checked in geo specific.
+This maked sure they are at some radius point where they are checked in.
 
-## Getting Started
+## How to run?
 
-This project is a starting point for a Flutter application.
+simply clone this repo
+```sh
+git clone https://github.com/MOo207/saff_geo_attendence.git
+```
+then install dependencies
+```sh
+flutter pub get
+```
 
-A few resources to get you started if this is your first Flutter project:
+you are  ready now to run the project 
+```sh
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
